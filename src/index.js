@@ -1,7 +1,8 @@
 class SmartCalculator {
   constructor(initialValue) {
-    this.value = initialValue;
+    this.number = initialValue;
     this.cache = [];
+    this.result = 0;
   }
 
   add(number) {
@@ -51,9 +52,18 @@ class SmartCalculator {
 
   calculate() {
     this.cache.reduceRight((prev, curr, i) => {
-      this.cache.splice(i,2,[this.getOperation(prev[1], curr[0], prev[0]), curr[1]]);
-      return [this.getOperation(prev[1], curr[0], prev[0]), curr[1]];
-    })
+      if(!(/(add|subtract)/.test(curr[1])) && /(add|subtract)/.test(prev[1])){
+        return curr;
+      } else {
+        this.cache.splice(i,2,[this.getOperation(prev[1], curr[0], prev[0]), curr[1]]);
+        return [this.getOperation(prev[1], curr[0], prev[0]), curr[1]];
+      }
+    });
+
+    this.result = this.cache.reduce((prev,curr,i) => {
+      this.cache.splice(i,1,[this.getOperation(curr[1], prev[0], curr[0]), curr[1]]);
+      return [this.getOperation(curr[1], prev[0], curr[0]), curr[1]];
+    }, [this.number,""]);
   }
 
   powFilter() {
@@ -71,7 +81,8 @@ class SmartCalculator {
   valueOf() {
     console.log(this.powFilter());
     this.calculate();
-    return this.cache;
+    // return this.cache;
+    return this.result;
   }
 
 }
