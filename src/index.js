@@ -54,7 +54,8 @@ class SmartCalculator {
     this.cache.reduceRight((prev, curr, i) => {
       if((/(add|subtract)/.test(curr[1]) && /(add|subtract)/.test(prev[1]))
       ||  !(/(add|subtract)/.test(curr[1])) && /(add|subtract)/.test(prev[1])
-      || (prev[1] === curr[1] && /(add|subtract)/.test(curr[1]))){
+      || (prev[1] === curr[1] && /(add|subtract)/.test(curr[1]))
+      || (curr[1] === 'pow' && !(/(add|subtract)/.test(prev[1])))){
         return curr;
       } else {
         this.cache.splice(i,2,[this.getOperation(prev[1], curr[0], prev[0]), curr[1]]);
@@ -81,21 +82,26 @@ class SmartCalculator {
   }
 
   valueOf() {
+    this.powFilter();
     this.calculate();
-    // return this.cache;
+    this.cache = [];
     return this.result[0];
   }
 
 }
 
-const calculator = new SmartCalculator(8);
+const calculator = new SmartCalculator(6);
 
 const value = calculator
-  .subtract(93)
-  .multiply(1)
+  .pow(2)
   .pow(1)
-  .subtract(94)
-  .add(30); //-149
+  .add(33)
+  .pow(1)
+  .multiply(2)
+  .multiply(1)
+  .add(39)
+  .multiply(2)
+  .multiply(2); //258
 
 console.log(value);
 
