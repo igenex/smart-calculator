@@ -52,7 +52,8 @@ class SmartCalculator {
 
   calculate() {
     this.cache.reduceRight((prev, curr, i) => {
-      if(!(/(add|subtract)/.test(curr[1])) && /(add|subtract)/.test(prev[1])
+      if((/(add|subtract)/.test(curr[1]) && /(add|subtract)/.test(prev[1]))
+      ||  !(/(add|subtract)/.test(curr[1])) && /(add|subtract)/.test(prev[1])
       || (prev[1] === curr[1] && /(add|subtract)/.test(curr[1]))){
         return curr;
       } else {
@@ -86,6 +87,17 @@ class SmartCalculator {
   }
 
 }
+
+const calculator = new SmartCalculator(8);
+
+const value = calculator
+  .subtract(93)
+  .multiply(1)
+  .pow(1)
+  .subtract(94)
+  .add(30); //-149
+
+console.log(value);
 
 module.exports = SmartCalculator;
 
